@@ -11,4 +11,9 @@ export const validationSchema = Joi.object({
   MYSQL_PASSWORD: Joi.string().required(),
   MYSQL_DATABASE: Joi.string().required(),
   MYSQL_TCP_PORT: Joi.number().required(),
+
+  JWT_ACCESS_TOKEN_SECRET: Joi.string().required(),
+  JWT_ACCESS_TOKEN_EXPIRES_IN: Joi.string().required(),
+  JWT_REFRESH_TOKEN_SECRET: Joi.string().required(),
+  JWT_REFRESH_TOKEN_EXPIRES_IN: Joi.string().required(),
 });
