@@ -19,6 +19,7 @@ export class TypeOrmModuleOptionsFactory implements TypeOrmOptionsFactory {
       username: this.dbConfig.mysql.username,
       password: this.dbConfig.mysql.password,
       database: this.dbConfig.mysql.database,
+      timezone: this.dbConfig.mysql.timezone,
       entities: ['dist/**/entities/*{.ts,.js}'],
       logging: this.srvConfig.node.env !== 'prod',
     };

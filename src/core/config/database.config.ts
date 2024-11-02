@@ -8,5 +8,6 @@ export default registerAs(DATABASE_CONFIG_TOKEN, () => ({
     password: process.env.MYSQL_PASSWORD,
     database: process.env.MYSQL_DATABASE,
     port: +process.env.MYSQL_TCP_PORT!,
+    timezone: process.env.MYSQL_TIME_ZONE,
   },
 }));
