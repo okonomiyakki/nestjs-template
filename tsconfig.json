@@ -9,7 +9,6 @@
     "target": "ES2021",
     "sourceMap": true,
     "outDir": "./dist",
-    "baseUrl": "./",
     "incremental": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": false,
@@ -17,5 +16,6 @@
     "strict": true,
     "esModuleInterop": true
   },
+  "extends": "./tsconfig.paths.json",
   "include": [ "src" ],
 }
