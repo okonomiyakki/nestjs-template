@@ -12,14 +12,6 @@ export class UserEntity {
   id!: string;
 
   @Column('varchar', {
-    name: 'nickname',
-    length: 10,
-    nullable: false,
-    comment: 'User Nickname (NN, UQ)',
-  })
-  nickname!: string;
-
-  @Column('varchar', {
     name: 'email',
     length: 50,
     nullable: false,
@@ -34,6 +26,14 @@ export class UserEntity {
     comment: 'User Password (NN)',
   })
   password!: string;
+
+  @Column('varchar', {
+    name: 'nickname',
+    length: 10,
+    nullable: false,
+    comment: 'User Nickname (NN, UQ)',
+  })
+  nickname!: string;
 
   @CreateDateColumn({
     name: 'created_at',
