@@ -5,6 +5,8 @@ import serverConfig from '@core/config/server.config';
 import databaseConfig from '@core/config/database.config';
 import jwtConfig from '@core/config/jwt.config';
 import bcryptConfig from '@core/config/bcrypt.config';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { TypeOrmModuleOptionsFactory } from '@core/type-orm/factories/type-orm-module-options.factory';
 
 @Module({
   imports: [
@@ -14,6 +16,7 @@ import bcryptConfig from '@core/config/bcrypt.config';
       isGlobal: true,
       validationSchema: validationSchema,
     }),
+    TypeOrmModule.forRootAsync({ useClass: TypeOrmModuleOptionsFactory }),
   ],
 })
 export class CoreModule {}
