@@ -5,6 +5,7 @@ import { ConfigType } from '@nestjs/config';
 import { CreateUserDto } from '@users/dtos/internals/create-user.dto';
 import { SignUpRequestDto } from '@users/dtos/requests/sign-up-request.dto';
 import { SignUpResponseDto } from '@users/dtos/responses/sign-up-response.dto';
+import { UserProfileResponseDto } from '@users/dtos/responses/user-profile.response.dto';
 import bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 
@@ -25,7 +26,7 @@ export class UsersService {
     return await this.createUser(signUpRequest);
   }
 
-  private async createUser(signUpRequest: SignUpRequestDto): Promise<SignUpResponseDto> {
+  private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileResponseDto> {
     const { password } = signUpRequest;
 
     const hashedPassword = await bcrypt.hash(password, this.config.bcrypt.passwordSalt);
@@ -37,7 +38,7 @@ export class UsersService {
 
     const userEntity = await this.userRepository.saveUser(createUser);
 
-    return plainToInstance(SignUpResponseDto, userEntity);
+    return plainToInstance(UserProfileResponseDto, userEntity);
   }
 
   private async checkUserEmailExists(email: string): Promise<void> {
