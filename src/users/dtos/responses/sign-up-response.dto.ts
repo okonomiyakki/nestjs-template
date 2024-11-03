@@ -2,7 +2,7 @@ import { BaseDto } from '@common/dtos/base.dto';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class SignUpUserResponseDto extends BaseDto {
+export class SignUpResponseDto extends BaseDto {
   @Expose()
   readonly email!: string;
 

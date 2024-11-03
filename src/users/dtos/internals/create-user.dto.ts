@@ -1,3 +1,3 @@
-import { SignUpUserRequestDto } from '@users/dtos/requests/sign-up-user-request.dto';
+import { SignUpRequestDto } from '@users/dtos/requests/sign-up-request.dto';
 
-export class CreateUserDto extends SignUpUserRequestDto {}
+export class CreateUserDto extends SignUpRequestDto {}

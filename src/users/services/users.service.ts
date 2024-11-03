@@ -3,8 +3,8 @@ import { UserRepository } from '@core/type-orm/repositories/user.repository';
 import { ConflictException, Inject, Injectable } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { CreateUserDto } from '@users/dtos/internals/create-user.dto';
-import { SignUpUserRequestDto } from '@users/dtos/requests/sign-up-user-request.dto';
-import { SignUpUserResponseDto } from '@users/dtos/responses/sign-up-user-response.dto';
+import { SignUpRequestDto } from '@users/dtos/requests/sign-up-request.dto';
+import { SignUpResponseDto } from '@users/dtos/responses/sign-up-response.dto';
 import bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 
@@ -15,31 +15,29 @@ export class UsersService {
     @Inject(bcryptConfig.KEY) private readonly config: ConfigType<typeof bcryptConfig>,
   ) {}
 
-  async signUpUser(signUpUserRequest: SignUpUserRequestDto): Promise<SignUpUserResponseDto> {
-    const { email, nickname } = signUpUserRequest;
+  async signUpUser(signUpRequest: SignUpRequestDto): Promise<SignUpResponseDto> {
+    const { email, nickname } = signUpRequest;
 
     await this.checkUserEmailExists(email);
 
     await this.checkUserNicknameExists(nickname);
 
-    return await this.createUser(signUpUserRequest);
+    return await this.createUser(signUpRequest);
   }
 
-  private async createUser(
-    signUpUserRequest: SignUpUserRequestDto,
-  ): Promise<SignUpUserResponseDto> {
-    const { password } = signUpUserRequest;
+  private async createUser(signUpRequest: SignUpRequestDto): Promise<SignUpResponseDto> {
+    const { password } = signUpRequest;
 
     const hashedPassword = await bcrypt.hash(password, this.config.bcrypt.passwordSalt);
 
     const createUser: CreateUserDto = plainToInstance(CreateUserDto, {
-      ...signUpUserRequest,
+      ...signUpRequest,
       password: hashedPassword,
     });
 
     const userEntity = await this.userRepository.saveUser(createUser);
 
-    return plainToInstance(SignUpUserResponseDto, userEntity);
+    return plainToInstance(SignUpResponseDto, userEntity);
   }
 
   private async checkUserEmailExists(email: string): Promise<void> {
