@@ -1,12 +1,5 @@
-import { BaseDto } from '@common/dtos/base.dto';
-import { IUser } from '@users/interfaces/user.interface';
-import { Exclude, Expose } from 'class-transformer';
+import { Exclude } from 'class-transformer';
+import { UserProfileResponseDto } from '@users/dtos/responses/user-profile.response.dto';
 
 @Exclude()
-export class SignUpResponseDto extends BaseDto implements Pick<IUser, 'email' | 'nickname'> {
-  @Expose()
-  readonly email!: string;
-
-  @Expose()
-  readonly nickname!: string;
-}
+export class SignUpResponseDto extends UserProfileResponseDto {}
