@@ -1,12 +1,11 @@
 import { CustomRepository } from '@core/type-orm/decorators/custom-repository.decorator';
 import { UserEntity } from '@core/type-orm/entities/user.entity';
 import { InternalServerErrorException } from '@nestjs/common';
-import { CreateUserDto } from '@users/dtos/internals/create-user.dto';
-import { Repository } from 'typeorm';
+import { DeepPartial, Repository } from 'typeorm';
 
 @CustomRepository(UserEntity)
 export class UserRepository extends Repository<UserEntity> {
-  async saveUser(createUser: CreateUserDto): Promise<UserEntity> {
+  async saveUser(createUser: DeepPartial<UserEntity>): Promise<UserEntity> {
     try {
       const userEntity = await this.save(createUser);
 
