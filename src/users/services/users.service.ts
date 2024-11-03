@@ -1,6 +1,12 @@
 import bcryptConfig from '@core/config/bcrypt.config';
 import { UserRepository } from '@core/type-orm/repositories/user.repository';
-import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
+import {
+  ConflictException,
+  Inject,
+  Injectable,
+  NotFoundException,
+  UnauthorizedException,
+} from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { CreateUserDto } from '@users/dtos/internals/create-user.dto';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
@@ -27,12 +33,18 @@ export class UsersService {
     return await this.createUser(signUpRequest);
   }
 
-  async findUserByEmailOrThrow(email: string): Promise<UserProfileDto> {
+  async verifyUser(email: string, password: string): Promise<UserProfileResponseDto> {
     const userEntity = await this.userRepository.findUserByEmail(email);
 
     if (!userEntity) throw new NotFoundException('Account does not exist.');
 
-    return plainToInstance(UserProfileDto, userEntity);
+    const { password: hashedPassword } = userEntity;
+
+    const isPasswordMatched = await bcrypt.compare(password, hashedPassword);
+
+    if (!isPasswordMatched) throw new UnauthorizedException('Incorrect password.');
+
+    return plainToInstance(UserProfileResponseDto, userEntity);
   }
 
   private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileResponseDto> {
