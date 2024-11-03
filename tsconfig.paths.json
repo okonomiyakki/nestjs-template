@@ -5,6 +5,7 @@
       "@common/*": ["src/common/*"],
       "@core/*": ["src/core/*"],
       "@users/*": ["src/users/*"],
+      "@auth/*": ["src/auth/*"],
     },
   }
 }
