@@ -1,8 +1,9 @@
 import bcryptConfig from '@core/config/bcrypt.config';
 import { UserRepository } from '@core/type-orm/repositories/user.repository';
-import { ConflictException, Inject, Injectable } from '@nestjs/common';
+import { ConflictException, Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { CreateUserDto } from '@users/dtos/internals/create-user.dto';
+import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { SignUpRequestDto } from '@users/dtos/requests/sign-up-request.dto';
 import { SignUpResponseDto } from '@users/dtos/responses/sign-up-response.dto';
 import { UserProfileResponseDto } from '@users/dtos/responses/user-profile.response.dto';
@@ -24,6 +25,14 @@ export class UsersService {
     await this.checkUserNicknameExists(nickname);
 
     return await this.createUser(signUpRequest);
+  }
+
+  async findUserByEmailOrThrow(email: string): Promise<UserProfileDto> {
+    const userEntity = await this.userRepository.findUserByEmail(email);
+
+    if (!userEntity) throw new NotFoundException('Account does not exist.');
+
+    return plainToInstance(UserProfileDto, userEntity);
   }
 
   private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileResponseDto> {
