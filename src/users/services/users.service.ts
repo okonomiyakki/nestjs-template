@@ -34,17 +34,17 @@ export class UsersService {
   }
 
   async verifyUser(email: string, password: string): Promise<UserProfileResponseDto> {
-    const userEntity = await this.userRepository.findUserByEmail(email);
+    const userProfile: UserProfileDto | null = await this.userRepository.findUserByEmail(email);
 
-    if (!userEntity) throw new NotFoundException('Account does not exist.');
+    if (!userProfile) throw new NotFoundException('Account does not exist.');
 
-    const { password: hashedPassword } = userEntity;
+    const { password: hashedPassword } = userProfile;
 
     const isPasswordMatched = await bcrypt.compare(password, hashedPassword);
 
     if (!isPasswordMatched) throw new UnauthorizedException('Incorrect password.');
 
-    return plainToInstance(UserProfileResponseDto, userEntity);
+    return plainToInstance(UserProfileResponseDto, userProfile);
   }
 
   private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileResponseDto> {
@@ -57,21 +57,22 @@ export class UsersService {
       password: hashedPassword,
     });
 
-    const userEntity = await this.userRepository.saveUser(createUser);
+    const userProfile: UserProfileDto = await this.userRepository.saveUser(createUser);
 
-    return plainToInstance(UserProfileResponseDto, userEntity);
+    return plainToInstance(UserProfileResponseDto, userProfile);
   }
 
   private async checkUserEmailExists(email: string): Promise<void> {
-    const userEntity = await this.userRepository.findUserByEmail(email);
+    const userProfile: UserProfileDto | null = await this.userRepository.findUserByEmail(email);
 
-    if (userEntity?.email)
+    if (userProfile?.email)
       throw new ConflictException('This email is already registered with an existing account.');
   }
 
   private async checkUserNicknameExists(nickname: string): Promise<void> {
-    const userEntity = await this.userRepository.findUserByNickname(nickname);
+    const userProfile: UserProfileDto | null =
+      await this.userRepository.findUserByNickname(nickname);
 
-    if (userEntity?.nickname) throw new ConflictException('This nickname is already taken.');
+    if (userProfile?.nickname) throw new ConflictException('This nickname is already taken.');
   }
 }
