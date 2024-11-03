@@ -16,34 +16,42 @@ export class UsersService {
   ) {}
 
   async signUpUser(signUpUserRequest: SignUpUserRequestDto): Promise<SignUpUserResponseDto> {
-    const { email, password, nickname } = signUpUserRequest;
+    const { email, nickname } = signUpUserRequest;
 
-    await this.findUserByEmailOrThrow(email);
+    await this.checkUserEmailExists(email);
 
-    await this.findUserByNicknameOrThrow(nickname);
+    await this.checkUserNicknameExists(nickname);
+
+    return await this.createUser(signUpUserRequest);
+  }
+
+  private async createUser(
+    signUpUserRequest: SignUpUserRequestDto,
+  ): Promise<SignUpUserResponseDto> {
+    const { password } = signUpUserRequest;
 
     const hashedPassword = await bcrypt.hash(password, this.config.bcrypt.passwordSalt);
 
     const createUser: CreateUserDto = plainToInstance(CreateUserDto, {
-      email,
+      ...signUpUserRequest,
       password: hashedPassword,
-      nickname,
     });
 
-    const userEntity = await this.userRepository.save(createUser);
+    const userEntity = await this.userRepository.saveUser(createUser);
 
     return plainToInstance(SignUpUserResponseDto, userEntity);
   }
 
-  private async findUserByEmailOrThrow(email: string): Promise<void> {
-    const userEntity = await this.userRepository.findOneByEmailOrNull(email);
+  private async checkUserEmailExists(email: string): Promise<void> {
+    const userEntity = await this.userRepository.findUserByEmail(email);
 
-    if (userEntity?.email) throw new ConflictException('이미 사용중인 이메일 입니다.');
+    if (userEntity?.email)
+      throw new ConflictException('This email is already registered with an existing account.');
   }
 
-  private async findUserByNicknameOrThrow(nickname: string): Promise<void> {
-    const userEntity = await this.userRepository.findOneByNicknameOrNull(nickname);
+  private async checkUserNicknameExists(nickname: string): Promise<void> {
+    const userEntity = await this.userRepository.findUserByNickname(nickname);
 
-    if (userEntity?.nickname) throw new ConflictException('이미 사용중인 닉네임 입니다.');
+    if (userEntity?.nickname) throw new ConflictException('This nickname is already taken.');
   }
 }
