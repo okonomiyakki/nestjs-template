@@ -6,6 +6,7 @@
       "@core/*": ["src/core/*"],
       "@users/*": ["src/users/*"],
       "@auth/*": ["src/auth/*"],
+      "@token/*": ["src/auth/token/*"],
     },
   }
 }
