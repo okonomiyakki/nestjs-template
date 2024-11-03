@@ -1,10 +1,12 @@
 import { Column, CreateDateColumn, Entity, Index, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TokenEntity } from '@core/type-orm/entities/token.entity';
+import { IUser } from '@users/interfaces/user.interface';
+import { IBase } from '@common/interfaces/base.interface';
 
 @Index('UQ_IDX_user_nickname', ['nickname'], { unique: true })
 @Index('UQ_IDX_user_email', ['email'], { unique: true })
 @Entity('user')
-export class UserEntity {
+export class UserEntity implements IUser, IBase {
   @PrimaryGeneratedColumn('uuid', {
     name: 'id',
     comment: 'User UUID (PK, NN)',
