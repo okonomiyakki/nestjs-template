@@ -1,8 +1,8 @@
+import { AuthPayloadDto } from '@auth/dtos/internals/auth-payload.dto';
 import jwtConfig from '@core/config/jwt.config';
 import { Inject, UnauthorizedException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { RefreshTokenPayloadDto } from '@token/dtos/internals/refresh-token-payload.dto';
 import { TokenService } from '@token/services/token.service';
 import { Request } from 'express';
 import { ExtractJwt, Strategy } from 'passport-jwt';
@@ -20,10 +20,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-ref
     });
   }
 
-  async validate(
-    request: Request,
-    payload: RefreshTokenPayloadDto,
-  ): Promise<RefreshTokenPayloadDto> {
+  async validate(request: Request, payload: AuthPayloadDto): Promise<AuthPayloadDto> {
     const refreshToken = request?.cookies?.refreshToken;
 
     if (!refreshToken)
@@ -31,7 +28,7 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-ref
         'The refresh token is required. Please sign in again to obtain new token.',
       );
 
-    const { id: userId } = payload;
+    const { userId } = payload;
 
     await this.tokenService.verifyRefreshToken(userId, refreshToken);
 

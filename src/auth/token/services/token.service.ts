@@ -4,9 +4,7 @@ import { TokenRepository } from '@core/type-orm/repositories/token.repository';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { AccessTokenPayloadDto } from '@token/dtos/internals/access-token-payload.dto';
 import { AuthTokensDto } from '@token/dtos/internals/auth-tokens-dto';
-import { RefreshTokenPayloadDto } from '@token/dtos/internals/refresh-token-payload.dto';
 import { TokenDto } from '@token/dtos/internals/token.dto';
 import bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
@@ -20,15 +18,12 @@ export class TokenService {
     @Inject(bcryptConfig.KEY) private readonly hashConfig: ConfigType<typeof bcryptConfig>,
   ) {}
 
-  async generateTokens(
-    accessTokenPayload: AccessTokenPayloadDto,
-    refreshTokenPayload: RefreshTokenPayloadDto,
-  ): Promise<AuthTokensDto> {
-    const accessToken = this.generateAccessToken(accessTokenPayload);
+  async generateTokens(userId: string): Promise<AuthTokensDto> {
+    const accessToken = this.generateAccessToken(userId);
 
-    const refreshToken = this.generateRefreshToken(refreshTokenPayload);
+    const refreshToken = this.generateRefreshToken(userId);
 
-    await this.createRefreshToken(refreshTokenPayload, refreshToken);
+    await this.createRefreshToken(userId, refreshToken);
 
     return plainToInstance(AuthTokensDto, { accessToken, refreshToken });
   }
@@ -46,13 +41,13 @@ export class TokenService {
       );
   }
 
-  private generateAccessToken(payload: AccessTokenPayloadDto): string {
-    return this.jwtService.sign({ ...payload });
+  private generateAccessToken(userId: string): string {
+    return this.jwtService.sign({ userId });
   }
 
-  private generateRefreshToken(payload: RefreshTokenPayloadDto): string {
+  private generateRefreshToken(userId: string): string {
     return this.jwtService.sign(
-      { ...payload },
+      { userId },
       {
         secret: this.config.jwt.refreshToken.secret,
         subject: 'refresh-token',
@@ -61,12 +56,7 @@ export class TokenService {
     );
   }
 
-  private async createRefreshToken(
-    payload: RefreshTokenPayloadDto,
-    refreshToken: string,
-  ): Promise<void> {
-    const { id: userId } = payload;
-
+  private async createRefreshToken(userId: string, refreshToken: string): Promise<void> {
     const hashedRefreshToken = await bcrypt.hash(
       refreshToken,
       this.hashConfig.bcrypt.refreshTokenSalt,
