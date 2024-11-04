@@ -19,8 +19,8 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt-acce
     });
   }
 
-  async validate(payload: AccessTokenPayloadDto) {
-    // 3. payload 검증
+  // 3. payload 검증
+  async validate(payload: AccessTokenPayloadDto): Promise<AccessTokenPayloadDto> {
     const { id: userId } = payload;
 
     await this.usersService.validateUser(userId);
