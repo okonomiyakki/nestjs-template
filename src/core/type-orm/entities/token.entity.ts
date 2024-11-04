@@ -1,18 +1,11 @@
-import {
-  Column,
-  CreateDateColumn,
-  Entity,
-  JoinColumn,
-  OneToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { Column, Entity, JoinColumn, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { UserEntity } from '@core/type-orm/entities/user.entity';
 
 @Entity('token')
 export class TokenEntity {
   @PrimaryGeneratedColumn('uuid', {
     name: 'id',
-    comment: 'Token UUID (PK, NN)',
+    comment: 'Token Uuid (PK, NN)',
   })
   id!: string;
 
@@ -26,14 +19,15 @@ export class TokenEntity {
   @Column('varchar', {
     name: 'refresh_token',
     length: 60,
-    nullable: false,
     comment: 'Refresh Token (NN)',
   })
   refreshToken!: string;
 
-  @CreateDateColumn({
+  @Column({
     name: 'created_at',
     type: 'timestamp',
+    onUpdate: 'CURRENT_TIMESTAMP',
+    default: () => 'CURRENT_TIMESTAMP',
     comment: 'Token Creation Date (NN)',
   })
   createdAt!: Date;
