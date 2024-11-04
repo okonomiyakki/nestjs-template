@@ -41,6 +41,12 @@ export class TokenService {
       );
   }
 
+  async deleteRefreshToken(userId: string): Promise<void> {
+    const { affected } = await this.tokenRepository.deleteToken(userId);
+
+    if (!affected) throw new UnauthorizedException('The refresh token has already been deleted.');
+  }
+
   private generateAccessToken(userId: string): string {
     return this.jwtService.sign({ userId });
   }

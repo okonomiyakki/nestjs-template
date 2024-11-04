@@ -1,8 +1,20 @@
+import { AuthPayloadDto } from '@auth/dtos/internals/auth-payload.dto';
 import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
+import { JwtAccessTokenGuard } from '@auth/guards/jwt-access-token.guard';
 import { AuthService } from '@auth/services/auth.service';
+import { User } from '@common/decorators/user.decorator';
 import serverConfig from '@core/config/server.config';
-import { Body, Controller, HttpCode, HttpStatus, Inject, Post, Res } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  HttpCode,
+  HttpStatus,
+  Inject,
+  Post,
+  Res,
+  UseGuards,
+} from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { Response } from 'express';
 
@@ -29,5 +41,14 @@ export class AuthController {
     });
 
     return signInResponse;
+  }
+
+  @UseGuards(JwtAccessTokenGuard)
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @Post('v1/signout')
+  async signOut(@User() authPayload: AuthPayloadDto, @Res() response: Response): Promise<void> {
+    await this.authService.signOutUser(authPayload);
+
+    response.clearCookie('refreshToken');
   }
 }

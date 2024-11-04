@@ -25,6 +25,12 @@ export class AuthService {
     return plainToInstance(SignInResponseDto, { ...userProfile, ...authTokens });
   }
 
+  async signOutUser(authPayload: AuthPayloadDto): Promise<void> {
+    const { userId } = authPayload;
+
+    await this.tokenService.deleteRefreshToken(userId);
+  }
+
   private async signInToken(userProfile: UserProfileDto): Promise<AuthTokensDto> {
     const authPayload: AuthPayloadDto = plainToInstance(AuthPayloadDto, userProfile);
 
