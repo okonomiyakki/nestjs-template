@@ -20,9 +20,9 @@ export class AuthService {
 
     const userProfile: UserProfileDto = await this.usersService.verifyUser(email, password);
 
-    const tokens: AuthTokensDto = await this.signInToken(userProfile);
+    const authTokens: AuthTokensDto = await this.signInToken(userProfile);
 
-    return plainToInstance(SignInResponseDto, { ...userProfile, ...tokens });
+    return plainToInstance(SignInResponseDto, { ...userProfile, ...authTokens });
   }
 
   private async signInToken(userProfile: UserProfileDto): Promise<AuthTokensDto> {
