@@ -1,12 +1,13 @@
 import bcryptConfig from '@core/config/bcrypt.config';
 import jwtConfig from '@core/config/jwt.config';
 import { TokenRepository } from '@core/type-orm/repositories/token.repository';
-import { Inject, Injectable } from '@nestjs/common';
+import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
 import { AccessTokenPayloadDto } from '@token/dtos/internals/access-token-payload.dto';
 import { AuthTokensDto } from '@token/dtos/internals/auth-tokens-dto';
 import { RefreshTokenPayloadDto } from '@token/dtos/internals/refresh-token-payload.dto';
+import { TokenDto } from '@token/dtos/internals/token.dto';
 import bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 
@@ -30,6 +31,19 @@ export class TokenService {
     await this.createRefreshToken(refreshTokenPayload, refreshToken);
 
     return plainToInstance(AuthTokensDto, { accessToken, refreshToken });
+  }
+
+  async verifyRefreshToken(userId: string, refreshToken: string): Promise<void> {
+    const token: TokenDto = await this.validateRefreshToken(userId);
+
+    const { refreshToken: hashedRefreshToken } = token;
+
+    const isRefreshTokenMatched = await bcrypt.compare(refreshToken, hashedRefreshToken);
+
+    if (!isRefreshTokenMatched)
+      throw new UnauthorizedException(
+        'The refresh token is incorrect. Please sign in again to obtain new token.',
+      );
   }
 
   private generateAccessToken(payload: AccessTokenPayloadDto): string {
@@ -59,5 +73,13 @@ export class TokenService {
     );
 
     await this.tokenRepository.upsertToken(userId, hashedRefreshToken);
+  }
+
+  private async validateRefreshToken(userId: string): Promise<TokenDto> {
+    const token: TokenDto | null = await this.tokenRepository.findTokenByUserId(userId);
+
+    if (!token) throw new UnauthorizedException('Invalid payload.');
+
+    return token;
   }
 }

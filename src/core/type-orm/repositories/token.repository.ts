@@ -18,4 +18,14 @@ export class TokenRepository extends Repository<TokenEntity> {
       throw new InternalServerErrorException('Query failed.');
     }
   }
+
+  async findTokenByUserId(userId: string): Promise<TokenEntity | null> {
+    try {
+      const tokenEntity = await this.findOne({ where: { userId } });
+
+      return tokenEntity || null;
+    } catch (error) {
+      throw new InternalServerErrorException('Query failed.');
+    }
+  }
 }
