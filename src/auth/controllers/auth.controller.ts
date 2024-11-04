@@ -1,7 +1,9 @@
 import { AuthPayloadDto } from '@auth/dtos/internals/auth-payload.dto';
 import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
+import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
 import { JwtAccessTokenGuard } from '@auth/guards/jwt-access-token.guard';
+import { JwtRefreshTokenGuard } from '@auth/guards/jwt-refresh-token.guard';
 import { AuthService } from '@auth/services/auth.service';
 import { User } from '@common/decorators/user.decorator';
 import serverConfig from '@core/config/server.config';
@@ -50,5 +52,12 @@ export class AuthController {
     await this.authService.signOutUser(authPayload);
 
     response.clearCookie('refreshToken');
+  }
+
+  @UseGuards(JwtRefreshTokenGuard)
+  @HttpCode(HttpStatus.OK)
+  @Post('v1/refresh')
+  async refresh(@User() authPayload: AuthPayloadDto): Promise<RefreshResponseDto> {
+    return await this.authService.refreshUser(authPayload);
   }
 }

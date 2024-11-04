@@ -47,7 +47,7 @@ export class TokenService {
     if (!affected) throw new UnauthorizedException('The refresh token has already been deleted.');
   }
 
-  private generateAccessToken(userId: string): string {
+  generateAccessToken(userId: string): string {
     return this.jwtService.sign({ userId });
   }
 

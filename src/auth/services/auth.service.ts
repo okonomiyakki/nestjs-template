@@ -1,5 +1,6 @@
 import { AuthPayloadDto } from '@auth/dtos/internals/auth-payload.dto';
 import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
+import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
 import { Injectable } from '@nestjs/common';
 import { AuthTokensDto } from '@token/dtos/internals/auth-tokens-dto';
@@ -29,6 +30,14 @@ export class AuthService {
     const { userId } = authPayload;
 
     await this.tokenService.deleteRefreshToken(userId);
+  }
+
+  async refreshUser(authPayload: AuthPayloadDto): Promise<RefreshResponseDto> {
+    const { userId } = authPayload;
+
+    const accessToken = this.tokenService.generateAccessToken(userId);
+
+    return plainToInstance(RefreshResponseDto, { accessToken });
   }
 
   private async signInToken(userProfile: UserProfileDto): Promise<AuthTokensDto> {
