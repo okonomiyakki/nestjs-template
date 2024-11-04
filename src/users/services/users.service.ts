@@ -12,7 +12,7 @@ import { CreateUserDto } from '@users/dtos/internals/create-user.dto';
 import { UserDto } from '@users/dtos/internals/user.dto';
 import { SignUpRequestDto } from '@users/dtos/requests/sign-up-request.dto';
 import { SignUpResponseDto } from '@users/dtos/responses/sign-up-response.dto';
-import { UserProfileResponseDto } from '@users/dtos/responses/user-profile.response.dto';
+import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 
@@ -33,7 +33,7 @@ export class UsersService {
     return await this.createUser(signUpRequest);
   }
 
-  async verifyUser(email: string, password: string): Promise<UserProfileResponseDto> {
+  async verifyUser(email: string, password: string): Promise<UserProfileDto> {
     const user: UserDto | null = await this.userRepository.findUserByEmail(email);
 
     if (!user) throw new NotFoundException('Account does not exist.');
@@ -44,7 +44,7 @@ export class UsersService {
 
     if (!isPasswordMatched) throw new UnauthorizedException('Incorrect password.');
 
-    return plainToInstance(UserProfileResponseDto, user);
+    return plainToInstance(UserProfileDto, user);
   }
 
   async validateUser(userId: string): Promise<void> {
@@ -53,7 +53,7 @@ export class UsersService {
     if (!user) throw new UnauthorizedException('Invalid payload.');
   }
 
-  private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileResponseDto> {
+  private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileDto> {
     const { password } = signUpRequest;
 
     const hashedPassword = await bcrypt.hash(password, this.config.bcrypt.passwordSalt);
@@ -65,7 +65,7 @@ export class UsersService {
 
     const user: UserDto = await this.userRepository.saveUser(createUser);
 
-    return plainToInstance(UserProfileResponseDto, user);
+    return plainToInstance(UserProfileDto, user);
   }
 
   private async checkUserEmailExists(email: string): Promise<void> {

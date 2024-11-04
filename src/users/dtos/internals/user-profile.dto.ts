@@ -3,7 +3,7 @@ import { IUser } from '@users/interfaces/user.interface';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class UserProfileResponseDto extends BaseDto implements Pick<IUser, 'email' | 'nickname'> {
+export class UserProfileDto extends BaseDto implements Pick<IUser, 'email' | 'nickname'> {
   @Expose()
   readonly email!: string;
 

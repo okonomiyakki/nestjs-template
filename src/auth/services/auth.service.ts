@@ -5,7 +5,7 @@ import { AccessTokenPayloadDto } from '@token/dtos/internals/access-token-payloa
 import { AuthTokensDto } from '@token/dtos/internals/auth-tokens-dto';
 import { RefreshTokenPayloadDto } from '@token/dtos/internals/refresh-token-payload.dto';
 import { TokenService } from '@token/services/token.service';
-import { UserProfileResponseDto } from '@users/dtos/responses/user-profile.response.dto';
+import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { UsersService } from '@users/services/users.service';
 import { plainToInstance } from 'class-transformer';
 
@@ -19,19 +19,22 @@ export class AuthService {
   async signInUser(signInRequest: SignInRequestDto): Promise<SignInResponseDto> {
     const { email, password } = signInRequest;
 
-    const user: UserProfileResponseDto = await this.usersService.verifyUser(email, password);
+    const userProfile: UserProfileDto = await this.usersService.verifyUser(email, password);
 
-    const tokens: AuthTokensDto = await this.signInToken(user);
+    const tokens: AuthTokensDto = await this.signInToken(userProfile);
 
-    return plainToInstance(SignInResponseDto, { ...user, ...tokens });
+    return plainToInstance(SignInResponseDto, { ...userProfile, ...tokens });
   }
 
-  private async signInToken(user: UserProfileResponseDto): Promise<AuthTokensDto> {
-    const accessTokenPayload: AccessTokenPayloadDto = plainToInstance(AccessTokenPayloadDto, user);
+  private async signInToken(userProfile: UserProfileDto): Promise<AuthTokensDto> {
+    const accessTokenPayload: AccessTokenPayloadDto = plainToInstance(
+      AccessTokenPayloadDto,
+      userProfile,
+    );
 
     const refreshTokenPayload: RefreshTokenPayloadDto = plainToInstance(
       RefreshTokenPayloadDto,
-      user,
+      userProfile,
     );
 
     return await this.tokenService.generateTokens(accessTokenPayload, refreshTokenPayload);

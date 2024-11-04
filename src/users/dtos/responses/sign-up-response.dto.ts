@@ -1,3 +1,3 @@
-import { UserProfileResponseDto } from '@users/dtos/responses/user-profile.response.dto';
+import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 
-export class SignUpResponseDto extends UserProfileResponseDto {}
+export class SignUpResponseDto extends UserProfileDto {}

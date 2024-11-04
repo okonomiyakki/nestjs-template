@@ -1,8 +1,8 @@
 import { IAuthTokens } from '@token/interfaces/auth-tokens.interface';
-import { UserProfileResponseDto } from '@users/dtos/responses/user-profile.response.dto';
+import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { Expose } from 'class-transformer';
 
-export class SignInResponseDto extends UserProfileResponseDto implements IAuthTokens {
+export class SignInResponseDto extends UserProfileDto implements IAuthTokens {
   @Expose()
   readonly accessToken!: string;
 
