@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { CreateUserDto } from '@users/dtos/internals/create-user.dto';
-import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
+import { UserDto } from '@users/dtos/internals/user.dto';
 import { SignUpRequestDto } from '@users/dtos/requests/sign-up-request.dto';
 import { SignUpResponseDto } from '@users/dtos/responses/sign-up-response.dto';
 import { UserProfileResponseDto } from '@users/dtos/responses/user-profile.response.dto';
@@ -34,23 +34,23 @@ export class UsersService {
   }
 
   async verifyUser(email: string, password: string): Promise<UserProfileResponseDto> {
-    const userProfile: UserProfileDto | null = await this.userRepository.findUserByEmail(email);
+    const user: UserDto | null = await this.userRepository.findUserByEmail(email);
 
-    if (!userProfile) throw new NotFoundException('Account does not exist.');
+    if (!user) throw new NotFoundException('Account does not exist.');
 
-    const { password: hashedPassword } = userProfile;
+    const { password: hashedPassword } = user;
 
     const isPasswordMatched = await bcrypt.compare(password, hashedPassword);
 
     if (!isPasswordMatched) throw new UnauthorizedException('Incorrect password.');
 
-    return plainToInstance(UserProfileResponseDto, userProfile);
+    return plainToInstance(UserProfileResponseDto, user);
   }
 
   async validateUser(userId: string): Promise<void> {
-    const userProfile: UserProfileDto | null = await this.userRepository.findUserById(userId);
+    const user: UserDto | null = await this.userRepository.findUserById(userId);
 
-    if (!userProfile) throw new UnauthorizedException('Invalid payload.');
+    if (!user) throw new UnauthorizedException('Invalid payload.');
   }
 
   private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileResponseDto> {
@@ -63,22 +63,21 @@ export class UsersService {
       password: hashedPassword,
     });
 
-    const userProfile: UserProfileDto = await this.userRepository.saveUser(createUser);
+    const user: UserDto = await this.userRepository.saveUser(createUser);
 
-    return plainToInstance(UserProfileResponseDto, userProfile);
+    return plainToInstance(UserProfileResponseDto, user);
   }
 
   private async checkUserEmailExists(email: string): Promise<void> {
-    const userProfile: UserProfileDto | null = await this.userRepository.findUserByEmail(email);
+    const user: UserDto | null = await this.userRepository.findUserByEmail(email);
 
-    if (userProfile?.email)
+    if (user?.email)
       throw new ConflictException('This email is already registered with an existing account.');
   }
 
   private async checkUserNicknameExists(nickname: string): Promise<void> {
-    const userProfile: UserProfileDto | null =
-      await this.userRepository.findUserByNickname(nickname);
+    const user: UserDto | null = await this.userRepository.findUserByNickname(nickname);
 
-    if (userProfile?.nickname) throw new ConflictException('This nickname is already taken.');
+    if (user?.nickname) throw new ConflictException('This nickname is already taken.');
   }
 }
