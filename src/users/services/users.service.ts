@@ -47,6 +47,12 @@ export class UsersService {
     return plainToInstance(UserProfileResponseDto, userProfile);
   }
 
+  async validateUser(userId: string): Promise<void> {
+    const userProfile: UserProfileDto | null = await this.userRepository.findUserById(userId);
+
+    if (!userProfile) throw new UnauthorizedException('Invalid payload.');
+  }
+
   private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileResponseDto> {
     const { password } = signUpRequest;
 

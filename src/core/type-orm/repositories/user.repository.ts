@@ -34,4 +34,14 @@ export class UserRepository extends Repository<UserEntity> {
       throw new InternalServerErrorException('Query failed.');
     }
   }
+
+  async findUserById(id: string): Promise<UserEntity | null> {
+    try {
+      const userEntity = await this.findOne({ where: { id } });
+
+      return userEntity || null;
+    } catch (error) {
+      throw new InternalServerErrorException('Query failed.');
+    }
+  }
 }
