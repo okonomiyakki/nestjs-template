@@ -1,4 +1,4 @@
-import { IAuthPayload } from '@auth/dtos/interfaces/auth-payload.interface';
+import { IAuthPayload } from '@auth/interfaces/auth-payload.interface';
 import { Expose } from 'class-transformer';
 
 export class AuthPayloadDto implements IAuthPayload {
