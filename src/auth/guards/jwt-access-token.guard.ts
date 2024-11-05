@@ -6,7 +6,6 @@ import { Observable } from 'rxjs';
 
 @Injectable()
 export class JwtAccessTokenGuard extends AuthGuard('jwt-access') {
-  // 4. payload 반환
   handleRequest<TUser = AuthPayloadDto>(
     err: Error | null,
     user: TUser | null,
@@ -28,7 +27,6 @@ export class JwtAccessTokenGuard extends AuthGuard('jwt-access') {
     return user;
   }
 
-  // 1. 요청 컨텍스트 실행
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
     return super.canActivate(context);
   }

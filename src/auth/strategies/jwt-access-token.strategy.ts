@@ -9,7 +9,6 @@ import { plainToInstance } from 'class-transformer';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt-access') {
-  // 2. 토큰 검즘
   constructor(
     private readonly usersService: UsersService,
     @Inject(jwtConfig.KEY) private readonly config: ConfigType<typeof jwtConfig>,
@@ -21,7 +20,6 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt-acce
     });
   }
 
-  // 3. payload 검증
   async validate(payload: AuthPayloadDto): Promise<AuthPayloadDto> {
     const { userId: id } = payload;
 
