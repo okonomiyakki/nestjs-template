@@ -41,7 +41,10 @@ export class AuthService {
   }
 
   private async signInToken(userProfile: UserProfileDto): Promise<AuthTokensDto> {
-    const authPayload: AuthPayloadDto = plainToInstance(AuthPayloadDto, userProfile);
+    const authPayload: AuthPayloadDto = plainToInstance(AuthPayloadDto, {
+      ...userProfile,
+      userId: userProfile.id,
+    });
 
     const { userId } = authPayload;
 

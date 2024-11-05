@@ -1,6 +1,7 @@
 import { IAuthPayload } from '@auth/interfaces/auth-payload.interface';
-import { Expose } from 'class-transformer';
+import { Exclude, Expose } from 'class-transformer';
 
+@Exclude()
 export class AuthPayloadDto implements IAuthPayload {
   @Expose()
   readonly userId!: string;
