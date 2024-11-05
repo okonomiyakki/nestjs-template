@@ -42,15 +42,17 @@ export class UsersService {
 
     const isPasswordMatched = await bcrypt.compare(password, hashedPassword);
 
-    if (!isPasswordMatched) throw new UnauthorizedException('Incorrect password.');
+    if (!isPasswordMatched) throw new UnauthorizedException('The password is incorrect.');
 
     return plainToInstance(UserProfileDto, user);
   }
 
-  async validateUser(userId: string): Promise<void> {
-    const user: UserDto | null = await this.userRepository.findUserById(userId);
+  async getUserProfileById(id: string): Promise<UserProfileDto> {
+    const user: UserDto | null = await this.userRepository.findUserById(id);
 
-    if (!user) throw new UnauthorizedException('Invalid user.');
+    if (!user) throw new NotFoundException('The user has already been deleted.');
+
+    return plainToInstance(UserProfileDto, user);
   }
 
   private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileDto> {
