@@ -13,7 +13,7 @@ export class JwtRefreshTokenGuard extends AuthGuard('jwt-refresh') {
   ): TUser {
     if (err) throw new UnauthorizedException('An error occurred during authentication.');
 
-    if (info.message === 'No auth token')
+    if (info?.message === 'No auth token')
       throw new UnauthorizedException('The refresh token is required.');
 
     if (info instanceof TokenExpiredError)

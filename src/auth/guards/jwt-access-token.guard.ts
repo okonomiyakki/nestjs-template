@@ -14,13 +14,11 @@ export class JwtAccessTokenGuard extends AuthGuard('jwt-access') {
   ): TUser {
     if (err) throw new UnauthorizedException('An error occurred during authentication.');
 
-    if (info.message === 'No auth token')
+    if (info?.message === 'No auth token')
       throw new UnauthorizedException('The access token is required.');
 
     if (info instanceof TokenExpiredError)
-      throw new UnauthorizedException(
-        'The access token has expired. Please sign in again to obtain new token.',
-      );
+      throw new UnauthorizedException('The access token has expired.');
 
     if (info instanceof JsonWebTokenError)
       throw new UnauthorizedException('The access token is invalid. Please provide a valid token.');
