@@ -10,6 +10,7 @@ import serverConfig from '@core/config/server.config';
 import {
   Body,
   Controller,
+  Delete,
   HttpCode,
   HttpStatus,
   Inject,
@@ -46,8 +47,11 @@ export class AuthController {
 
   @UseGuards(JwtAccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
-  @Post('v1/signout')
-  async signOut(@User() authPayload: AuthPayloadDto, @Res() response: Response): Promise<void> {
+  @Delete('v1/signout')
+  async signOut(
+    @User() authPayload: AuthPayloadDto,
+    @Res({ passthrough: true }) response: Response,
+  ): Promise<void> {
     await this.authService.signOutUser(authPayload);
 
     response.clearCookie('refreshToken');
