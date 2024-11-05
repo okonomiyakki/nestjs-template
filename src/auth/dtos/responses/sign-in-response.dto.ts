@@ -8,5 +8,5 @@ export class SignInResponseDto {
   readonly userProfile!: UserProfileDto;
 
   @Expose()
-  readonly authToken!: Pick<AuthTokensDto, 'accessToken'>;
+  readonly accessToken!: Pick<AuthTokensDto, 'accessToken'>;
 }

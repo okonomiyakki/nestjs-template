@@ -25,9 +25,9 @@ export class AuthService {
 
     const authTokens: AuthTokensDto = await this.signInToken(userProfile);
 
-    const { accessToken: authToken, refreshToken } = authTokens;
+    const { accessToken, refreshToken } = authTokens;
 
-    const signInResponse = plainToInstance(SignInResponseDto, { userProfile, authToken });
+    const signInResponse = plainToInstance(SignInResponseDto, { userProfile, accessToken });
 
     return { signInResponse, refreshToken };
   }
