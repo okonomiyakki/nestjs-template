@@ -1,12 +1,12 @@
-import { IAuthTokens } from '@token/interfaces/auth-tokens.interface';
+import { AuthTokensDto } from '@token/dtos/internals/auth-tokens-dto';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class SignInResponseDto extends UserProfileDto implements IAuthTokens {
+export class SignInResponseDto {
   @Expose()
-  readonly accessToken!: string;
+  readonly userProfile!: UserProfileDto;
 
   @Expose()
-  readonly refreshToken!: string;
+  readonly authToken!: Pick<AuthTokensDto, 'accessToken'>;
 }

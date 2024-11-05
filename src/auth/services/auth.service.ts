@@ -16,14 +16,20 @@ export class AuthService {
     private readonly tokenService: TokenService,
   ) {}
 
-  async signInUser(signInRequest: SignInRequestDto): Promise<SignInResponseDto> {
+  async signInUser(
+    signInRequest: SignInRequestDto,
+  ): Promise<{ responseBody: SignInResponseDto; responseCookie: string }> {
     const { email, password } = signInRequest;
 
     const userProfile: UserProfileDto = await this.usersService.verifyUser(email, password);
 
     const authTokens: AuthTokensDto = await this.signInToken(userProfile);
 
-    return plainToInstance(SignInResponseDto, { ...userProfile, ...authTokens });
+    const { accessToken: authToken, refreshToken: responseCookie } = authTokens;
+
+    const responseBody = plainToInstance(SignInResponseDto, { userProfile, authToken });
+
+    return { responseBody, responseCookie };
   }
 
   async signOutUser(authPayload: AuthPayloadDto): Promise<void> {
