@@ -33,15 +33,15 @@ export class AuthController {
     @Body() signInRequest: SignInRequestDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<SignInResponseDto> {
-    const { responseBody, responseCookie } = await this.authService.signInUser(signInRequest);
+    const { signInResponse, refreshToken } = await this.authService.signInUser(signInRequest);
 
-    response.cookie('refreshToken', responseCookie, {
+    response.cookie('refreshToken', refreshToken, {
       httpOnly: true,
       secure: this.config.node.env === 'prod',
       maxAge: this.config.server.refreshTokenCookieMaxAge,
     });
 
-    return responseBody;
+    return signInResponse;
   }
 
   @UseGuards(JwtAccessTokenGuard)

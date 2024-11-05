@@ -18,18 +18,18 @@ export class AuthService {
 
   async signInUser(
     signInRequest: SignInRequestDto,
-  ): Promise<{ responseBody: SignInResponseDto; responseCookie: string }> {
+  ): Promise<{ signInResponse: SignInResponseDto; refreshToken: string }> {
     const { email, password } = signInRequest;
 
     const userProfile: UserProfileDto = await this.usersService.verifyUser(email, password);
 
     const authTokens: AuthTokensDto = await this.signInToken(userProfile);
 
-    const { accessToken: authToken, refreshToken: responseCookie } = authTokens;
+    const { accessToken: authToken, refreshToken } = authTokens;
 
-    const responseBody = plainToInstance(SignInResponseDto, { userProfile, authToken });
+    const signInResponse = plainToInstance(SignInResponseDto, { userProfile, authToken });
 
-    return { responseBody, responseCookie };
+    return { signInResponse, refreshToken };
   }
 
   async signOutUser(authPayload: AuthPayloadDto): Promise<void> {
