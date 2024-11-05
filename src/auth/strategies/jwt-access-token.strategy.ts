@@ -3,7 +3,9 @@ import jwtConfig from '@core/config/jwt.config';
 import { Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { UsersService } from '@users/services/users.service';
+import { plainToInstance } from 'class-transformer';
 import { ExtractJwt, Strategy } from 'passport-jwt';
 
 export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt-access') {
@@ -21,10 +23,13 @@ export class JwtAccessTokenStrategy extends PassportStrategy(Strategy, 'jwt-acce
 
   // 3. payload 검증
   async validate(payload: AuthPayloadDto): Promise<AuthPayloadDto> {
-    const { userId } = payload;
+    const { userId: id } = payload;
 
-    await this.usersService.validateUser(userId);
+    const userProfile: UserProfileDto = await this.usersService.getUserProfileById(id);
 
-    return payload;
+    return plainToInstance(AuthPayloadDto, {
+      ...userProfile,
+      userId: userProfile.id,
+    });
   }
 }
