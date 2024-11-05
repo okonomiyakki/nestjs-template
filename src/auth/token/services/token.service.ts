@@ -74,7 +74,7 @@ export class TokenService {
   private async validateRefreshToken(userId: string): Promise<TokenDto> {
     const token: TokenDto | null = await this.tokenRepository.findTokenByUserId(userId);
 
-    if (!token) throw new UnauthorizedException('Invalid payload.');
+    if (!token) throw new UnauthorizedException('Invalid user.');
 
     return token;
   }

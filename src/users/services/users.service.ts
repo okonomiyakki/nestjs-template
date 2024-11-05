@@ -50,7 +50,7 @@ export class UsersService {
   async validateUser(userId: string): Promise<void> {
     const user: UserDto | null = await this.userRepository.findUserById(userId);
 
-    if (!user) throw new UnauthorizedException('Invalid payload.');
+    if (!user) throw new UnauthorizedException('Invalid user.');
   }
 
   private async createUser(signUpRequest: SignUpRequestDto): Promise<UserProfileDto> {
