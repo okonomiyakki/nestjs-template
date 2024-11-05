@@ -28,17 +28,23 @@ export class TokenService {
     return plainToInstance(AuthTokensDto, { accessToken, refreshToken });
   }
 
-  async verifyRefreshToken(userId: string, refreshToken: string): Promise<void> {
-    const token: TokenDto = await this.validateRefreshToken(userId);
+  async verifyRefreshToken(userId: string, refreshToken: string): Promise<string> {
+    const token: TokenDto | null = await this.tokenRepository.findTokenByUserId(userId);
 
-    const { refreshToken: hashedRefreshToken } = token;
+    if (!token)
+      throw new UnauthorizedException('The user is invalid. Please ensure you are signed in.');
+
+    const { refreshToken: hashedRefreshToken, userId: id } = token;
 
     const isRefreshTokenMatched = await bcrypt.compare(refreshToken, hashedRefreshToken);
 
+    // When a user is logged in from two clients, this is the error returned when attempting to reissue an access token using the first logged-in client.
     if (!isRefreshTokenMatched)
       throw new UnauthorizedException(
-        'The refresh token is incorrect. Please sign in again to obtain new token.',
+        'Your session has been invalidated due to a new sign-in from another client. Please sign in again to continue.',
       );
+
+    return id;
   }
 
   async deleteRefreshToken(userId: string): Promise<void> {
@@ -69,13 +75,5 @@ export class TokenService {
     );
 
     await this.tokenRepository.upsertToken(userId, hashedRefreshToken);
-  }
-
-  private async validateRefreshToken(userId: string): Promise<TokenDto> {
-    const token: TokenDto | null = await this.tokenRepository.findTokenByUserId(userId);
-
-    if (!token) throw new UnauthorizedException('Invalid user.');
-
-    return token;
   }
 }
