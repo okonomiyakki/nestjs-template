@@ -5,7 +5,6 @@ import { IsEmail, IsNotEmpty, IsString, Length, Matches } from 'class-validator'
 export class SignInRequestDto {
   @ApiProperty({
     description: 'User Email',
-    type: String,
     example: 'example@eamil.com',
   })
   @IsNotEmpty()
@@ -15,7 +14,6 @@ export class SignInRequestDto {
 
   @ApiProperty({
     description: 'User Password',
-    type: String,
     example: 'P@ssw0rd4321',
   })
   @IsNotEmpty()

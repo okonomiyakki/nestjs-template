@@ -9,7 +9,6 @@ import { IsEmail, IsNotEmpty, IsString, Length, Matches } from 'class-validator'
 export class SignUpRequestDto {
   @ApiProperty({
     description: 'User Email',
-    type: String,
     example: 'example@eamil.com',
   })
   @IsNotEmpty()
@@ -19,7 +18,6 @@ export class SignUpRequestDto {
 
   @ApiProperty({
     description: 'User Password',
-    type: String,
     example: 'examplepw123*',
   })
   @IsNotEmpty()
@@ -29,8 +27,6 @@ export class SignUpRequestDto {
 
   @ApiProperty({
     description: 'User Nickname',
-    type: String,
-    example: 'example',
   })
   @IsNotEmpty()
   @IsString()
