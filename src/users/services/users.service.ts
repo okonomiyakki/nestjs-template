@@ -9,7 +9,6 @@ import {
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { CreateUserDto } from '@users/dtos/internals/create-user.dto';
-import { UserDto } from '@users/dtos/internals/user.dto';
 import { SignUpRequestDto } from '@users/dtos/requests/sign-up-request.dto';
 import { SignUpResponseDto } from '@users/dtos/responses/sign-up-response.dto';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
@@ -30,11 +29,13 @@ export class UsersService {
 
     await this.checkUserNicknameExists(nickname);
 
-    return await this.createUser(signUpRequest);
+    const userProfile: UserProfileDto = await this.createUser(signUpRequest);
+
+    return plainToInstance(SignUpResponseDto, { userProfile });
   }
 
   async verifyUser(email: string, password: string): Promise<UserProfileDto> {
-    const user: UserDto | null = await this.userRepository.findUserByEmail(email);
+    const user = await this.userRepository.findUserByEmail(email);
 
     if (!user) throw new NotFoundException('Account does not exist.');
 
@@ -48,7 +49,7 @@ export class UsersService {
   }
 
   async getUserProfileById(id: string): Promise<UserProfileDto> {
-    const user: UserDto | null = await this.userRepository.findUserById(id);
+    const user = await this.userRepository.findUserById(id);
 
     if (!user) throw new NotFoundException('The user has already been deleted.');
 
@@ -65,20 +66,20 @@ export class UsersService {
       password: hashedPassword,
     });
 
-    const user: UserDto = await this.userRepository.saveUser(createUser);
+    const user = await this.userRepository.saveUser(createUser);
 
     return plainToInstance(UserProfileDto, user);
   }
 
   private async checkUserEmailExists(email: string): Promise<void> {
-    const user: UserDto | null = await this.userRepository.findUserByEmail(email);
+    const user = await this.userRepository.findUserByEmail(email);
 
     if (user?.email)
       throw new ConflictException('This email is already registered with an existing account.');
   }
 
   private async checkUserNicknameExists(nickname: string): Promise<void> {
-    const user: UserDto | null = await this.userRepository.findUserByNickname(nickname);
+    const user = await this.userRepository.findUserByNickname(nickname);
 
     if (user?.nickname) throw new ConflictException('This nickname is already taken.');
   }
