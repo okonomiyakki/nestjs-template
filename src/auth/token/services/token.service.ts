@@ -7,7 +7,6 @@ import { JwtService } from '@nestjs/jwt';
 import { AuthPayloadDto } from '@token/dtos/auth-payload.dto';
 import { AuthTokensDto } from '@token/dtos/auth-tokens-dto';
 import { PayloadDto } from '@token/dtos/payload.dto';
-import { TokenDto } from '@token/dtos/token.dto';
 import bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 
@@ -34,7 +33,7 @@ export class TokenService {
   ): Promise<{ id: string }> {
     const { id: userId } = authPayload;
 
-    const token: TokenDto | null = await this.tokenRepository.findTokenByUserId(userId);
+    const token = await this.tokenRepository.findTokenByUserId(userId);
 
     if (!token)
       throw new UnauthorizedException('The user is invalid. Please ensure you are signed in.');
