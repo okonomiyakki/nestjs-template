@@ -1,4 +1,3 @@
-import { AuthTokensDto } from '@token/dtos/auth-tokens-dto';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { Exclude, Expose } from 'class-transformer';
 
@@ -8,5 +7,5 @@ export class SignInResponseDto {
   readonly userProfile!: UserProfileDto;
 
   @Expose()
-  readonly accessToken!: Pick<AuthTokensDto, 'accessToken'>;
+  readonly accessToken!: string;
 }

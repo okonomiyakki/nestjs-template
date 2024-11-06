@@ -1,8 +1,7 @@
-import { IAuthTokens } from '@token/interfaces/auth-tokens.interface';
 import { Exclude, Expose } from 'class-transformer';
 
 @Exclude()
-export class RefreshResponseDto implements Pick<IAuthTokens, 'accessToken'> {
+export class RefreshResponseDto {
   @Expose()
   accessToken!: string;
 }
