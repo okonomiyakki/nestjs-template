@@ -1,4 +1,3 @@
-import { PayloadDto } from '@token/dtos/payload.dto';
 import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
 import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
@@ -19,8 +18,18 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
+import {
+  ApiBearerAuth,
+  ApiCookieAuth,
+  ApiNoContentResponse,
+  ApiOkResponse,
+  ApiOperation,
+  ApiTags,
+} from '@nestjs/swagger';
+import { PayloadDto } from '@token/dtos/payload.dto';
 import { Response } from 'express';
 
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(
@@ -28,6 +37,8 @@ export class AuthController {
     @Inject(serverConfig.KEY) private readonly config: ConfigType<typeof serverConfig>,
   ) {}
 
+  @ApiOperation({ summary: 'Sign-in user' })
+  @ApiOkResponse({ type: SignInResponseDto })
   @HttpCode(HttpStatus.OK)
   @Post('v1/signin')
   async signIn(
@@ -45,6 +56,9 @@ export class AuthController {
     return signInResponse;
   }
 
+  @ApiOperation({ summary: 'Sign-out user' })
+  @ApiNoContentResponse({ description: 'No content' })
+  @ApiBearerAuth('access-token')
   @UseGuards(JwtAccessTokenGuard)
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('v1/signout')
@@ -57,6 +71,9 @@ export class AuthController {
     response.clearCookie('refreshToken');
   }
 
+  @ApiOperation({ summary: 'Refresh access-token' })
+  @ApiOkResponse({ type: RefreshResponseDto })
+  @ApiCookieAuth('refresh-token')
   @UseGuards(JwtRefreshTokenGuard)
   @HttpCode(HttpStatus.OK)
   @Post('v1/refresh')
