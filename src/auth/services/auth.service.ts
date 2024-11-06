@@ -3,7 +3,7 @@ import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
 import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
 import { Injectable } from '@nestjs/common';
-import { AuthTokensDto } from '@token/dtos/internals/auth-tokens-dto';
+import { AuthTokensDto } from '@token/dtos/auth-tokens-dto';
 import { TokenService } from '@token/services/token.service';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { UsersService } from '@users/services/users.service';

@@ -5,8 +5,8 @@ import { TokenRepository } from '@core/type-orm/repositories/token.repository';
 import { Inject, Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { JwtService } from '@nestjs/jwt';
-import { AuthTokensDto } from '@token/dtos/internals/auth-tokens-dto';
-import { TokenDto } from '@token/dtos/internals/token.dto';
+import { AuthTokensDto } from '@token/dtos/auth-tokens-dto';
+import { TokenDto } from '@token/dtos/token.dto';
 import bcrypt from 'bcrypt';
 import { plainToInstance } from 'class-transformer';
 

@@ -4,7 +4,7 @@ import jwtConfig from '@core/config/jwt.config';
 import { Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
-import { TokenDto } from '@token/dtos/internals/token.dto';
+import { TokenDto } from '@token/dtos/token.dto';
 import { TokenService } from '@token/services/token.service';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { UsersService } from '@users/services/users.service';

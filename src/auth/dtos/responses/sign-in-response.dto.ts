@@ -1,4 +1,4 @@
-import { AuthTokensDto } from '@token/dtos/internals/auth-tokens-dto';
+import { AuthTokensDto } from '@token/dtos/auth-tokens-dto';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { Exclude, Expose } from 'class-transformer';
 
