@@ -1,5 +1,6 @@
 import { Column, Entity, Index, OneToOne, PrimaryGeneratedColumn } from 'typeorm';
 import { TokenEntity } from '@core/type-orm/entities/token.entity';
+import { Role } from '@common/constants/roles.enum';
 
 @Index('UQ_IDX_user_nickname', ['nickname'], { unique: true })
 @Index('UQ_IDX_user_email', ['email'], { unique: true })
@@ -31,6 +32,14 @@ export class UserEntity {
     comment: 'User Nickname (NN, UQ)',
   })
   nickname!: string;
+
+  @Column('enum', {
+    name: 'role',
+    enum: Role,
+    default: Role.GUEST,
+    comment: 'User Role (NN)',
+  })
+  role!: Role;
 
   @Column({
     name: 'created_at',
