@@ -1,8 +1,7 @@
-import { IAuthPayload } from '@auth/interfaces/auth-payload.interface';
-import { Exclude, Expose } from 'class-transformer';
+import { IPayload } from '@auth/interfaces/payload.interface';
+import { Expose } from 'class-transformer';
 
-@Exclude()
-export class AuthPayloadDto implements IAuthPayload {
+export class AuthPayloadDto implements Pick<IPayload, 'id'> {
   @Expose()
-  readonly userId!: string;
+  readonly id!: string;
 }
