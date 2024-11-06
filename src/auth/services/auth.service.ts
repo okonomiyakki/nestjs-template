@@ -1,9 +1,10 @@
-import { PayloadDto } from '@token/dtos/payload.dto';
 import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
 import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
 import { Injectable } from '@nestjs/common';
+import { AuthPayloadDto } from '@token/dtos/auth-payload.dto';
 import { AuthTokensDto } from '@token/dtos/auth-tokens-dto';
+import { PayloadDto } from '@token/dtos/payload.dto';
 import { TokenService } from '@token/services/token.service';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { UsersService } from '@users/services/users.service';
@@ -33,15 +34,11 @@ export class AuthService {
   }
 
   async signOutUser(payload: PayloadDto): Promise<void> {
-    const { id: userId } = payload;
-
-    await this.tokenService.deleteRefreshToken(userId);
+    await this.tokenService.deleteRefreshToken(payload);
   }
 
   async refreshUser(payload: PayloadDto): Promise<RefreshResponseDto> {
-    const { id, nickname, role } = payload;
-
-    const accessToken = this.tokenService.generateAccessToken(id, nickname, role);
+    const accessToken = this.tokenService.generateAccessToken(payload);
 
     return plainToInstance(RefreshResponseDto, { accessToken });
   }
@@ -49,8 +46,8 @@ export class AuthService {
   private async signInToken(userProfile: UserProfileDto): Promise<AuthTokensDto> {
     const payload: PayloadDto = plainToInstance(PayloadDto, userProfile);
 
-    const { id, nickname, role } = payload;
+    const authPayload: AuthPayloadDto = plainToInstance(AuthPayloadDto, userProfile);
 
-    return await this.tokenService.generateTokens(id, nickname, role);
+    return await this.tokenService.generateTokens(payload, authPayload);
   }
 }
