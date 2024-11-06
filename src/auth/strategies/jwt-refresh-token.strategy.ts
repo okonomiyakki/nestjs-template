@@ -1,8 +1,10 @@
 import { AuthPayloadDto } from '@auth/dtos/internals/auth-payload.dto';
+import { PayloadDto } from '@auth/dtos/internals/payload.dto';
 import jwtConfig from '@core/config/jwt.config';
 import { Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
+import { TokenDto } from '@token/dtos/internals/token.dto';
 import { TokenService } from '@token/services/token.service';
 import { UserProfileDto } from '@users/dtos/internals/user-profile.dto';
 import { UsersService } from '@users/services/users.service';
@@ -24,18 +26,17 @@ export class JwtRefreshTokenStrategy extends PassportStrategy(Strategy, 'jwt-ref
     });
   }
 
-  async validate(request: Request, payload: AuthPayloadDto): Promise<AuthPayloadDto> {
+  async validate(request: Request, authPayload: AuthPayloadDto): Promise<PayloadDto> {
     const { refreshToken } = request.cookies;
 
-    const { userId } = payload;
+    const { id: userId } = authPayload;
 
-    const id = await this.tokenService.verifyRefreshToken(userId, refreshToken);
+    const token: TokenDto = await this.tokenService.verifyRefreshToken(userId, refreshToken);
+
+    const { userId: id } = token;
 
     const userProfile: UserProfileDto = await this.usersService.getUserProfileById(id);
 
-    return plainToInstance(AuthPayloadDto, {
-      ...userProfile,
-      userId: userProfile.id,
-    });
+    return plainToInstance(PayloadDto, userProfile);
   }
 }

@@ -1,4 +1,4 @@
-import { AuthPayloadDto } from '@auth/dtos/internals/auth-payload.dto';
+import { PayloadDto } from '@auth/dtos/internals/payload.dto';
 import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
 import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
@@ -49,10 +49,10 @@ export class AuthController {
   @HttpCode(HttpStatus.NO_CONTENT)
   @Delete('v1/signout')
   async signOut(
-    @User() authPayload: AuthPayloadDto,
+    @User() payload: PayloadDto,
     @Res({ passthrough: true }) response: Response,
   ): Promise<void> {
-    await this.authService.signOutUser(authPayload);
+    await this.authService.signOutUser(payload);
 
     response.clearCookie('refreshToken');
   }
@@ -60,7 +60,7 @@ export class AuthController {
   @UseGuards(JwtRefreshTokenGuard)
   @HttpCode(HttpStatus.OK)
   @Post('v1/refresh')
-  async refresh(@User() authPayload: AuthPayloadDto): Promise<RefreshResponseDto> {
-    return await this.authService.refreshUser(authPayload);
+  async refresh(@User() payload: PayloadDto): Promise<RefreshResponseDto> {
+    return await this.authService.refreshUser(payload);
   }
 }

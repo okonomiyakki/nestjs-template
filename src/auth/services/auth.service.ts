@@ -1,4 +1,4 @@
-import { AuthPayloadDto } from '@auth/dtos/internals/auth-payload.dto';
+import { PayloadDto } from '@auth/dtos/internals/payload.dto';
 import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
 import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
@@ -32,28 +32,25 @@ export class AuthService {
     return { signInResponse, refreshToken };
   }
 
-  async signOutUser(authPayload: AuthPayloadDto): Promise<void> {
-    const { userId } = authPayload;
+  async signOutUser(payload: PayloadDto): Promise<void> {
+    const { id: userId } = payload;
 
     await this.tokenService.deleteRefreshToken(userId);
   }
 
-  async refreshUser(authPayload: AuthPayloadDto): Promise<RefreshResponseDto> {
-    const { userId } = authPayload;
+  async refreshUser(payload: PayloadDto): Promise<RefreshResponseDto> {
+    const { id, nickname, role } = payload;
 
-    const accessToken = this.tokenService.generateAccessToken(userId);
+    const accessToken = this.tokenService.generateAccessToken(id, nickname, role);
 
     return plainToInstance(RefreshResponseDto, { accessToken });
   }
 
   private async signInToken(userProfile: UserProfileDto): Promise<AuthTokensDto> {
-    const authPayload: AuthPayloadDto = plainToInstance(AuthPayloadDto, {
-      ...userProfile,
-      userId: userProfile.id,
-    });
+    const payload: PayloadDto = plainToInstance(PayloadDto, userProfile);
 
-    const { userId } = authPayload;
+    const { id, nickname, role } = payload;
 
-    return await this.tokenService.generateTokens(userId);
+    return await this.tokenService.generateTokens(id, nickname, role);
   }
 }

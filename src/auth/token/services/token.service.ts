@@ -1,3 +1,4 @@
+import { Role } from '@common/constants/roles.enum';
 import bcryptConfig from '@core/config/bcrypt.config';
 import jwtConfig from '@core/config/jwt.config';
 import { TokenRepository } from '@core/type-orm/repositories/token.repository';
@@ -18,23 +19,25 @@ export class TokenService {
     @Inject(bcryptConfig.KEY) private readonly hashConfig: ConfigType<typeof bcryptConfig>,
   ) {}
 
-  async generateTokens(userId: string): Promise<AuthTokensDto> {
-    const accessToken = this.generateAccessToken(userId);
+  async generateTokens(id: string, nickname: string, role: Role): Promise<AuthTokensDto> {
+    const accessToken = this.generateAccessToken(id, nickname, role);
 
-    const refreshToken = this.generateRefreshToken(userId);
+    const refreshToken = this.generateRefreshToken(id);
+
+    const userId = id;
 
     await this.createRefreshToken(userId, refreshToken);
 
     return plainToInstance(AuthTokensDto, { accessToken, refreshToken });
   }
 
-  async verifyRefreshToken(userId: string, refreshToken: string): Promise<string> {
+  async verifyRefreshToken(userId: string, refreshToken: string): Promise<TokenDto> {
     const token: TokenDto | null = await this.tokenRepository.findTokenByUserId(userId);
 
     if (!token)
       throw new UnauthorizedException('The user is invalid. Please ensure you are signed in.');
 
-    const { refreshToken: hashedRefreshToken, userId: id } = token;
+    const { refreshToken: hashedRefreshToken } = token;
 
     const isRefreshTokenMatched = await bcrypt.compare(refreshToken, hashedRefreshToken);
 
@@ -44,7 +47,7 @@ export class TokenService {
         'Your session has been invalidated due to a new sign-in from another client. Please sign in again to continue.',
       );
 
-    return id;
+    return token;
   }
 
   async deleteRefreshToken(userId: string): Promise<void> {
@@ -53,13 +56,13 @@ export class TokenService {
     if (!affected) throw new UnauthorizedException('The refresh token has already been deleted.');
   }
 
-  generateAccessToken(userId: string): string {
-    return this.jwtService.sign({ userId });
+  generateAccessToken(id: string, nickname: string, role: Role): string {
+    return this.jwtService.sign({ id, nickname, role });
   }
 
-  private generateRefreshToken(userId: string): string {
+  private generateRefreshToken(id: string): string {
     return this.jwtService.sign(
-      { userId },
+      { id },
       {
         secret: this.config.jwt.refreshToken.secret,
         subject: 'refresh-token',
