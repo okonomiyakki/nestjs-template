@@ -3,7 +3,10 @@ import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
 import { JwtAccessTokenGuard } from '@auth/guards/jwt-access-token.guard';
 import { JwtRefreshTokenGuard } from '@auth/guards/jwt-refresh-token.guard';
+import { RolesGuard } from '@auth/guards/roles.guard';
 import { AuthService } from '@auth/services/auth.service';
+import { Role } from '@common/constants/roles.enum';
+import { Roles } from '@common/decorators/roles.decorator';
 import { User } from '@common/decorators/user.decorator';
 import serverConfig from '@core/config/server.config';
 import {
@@ -74,7 +77,8 @@ export class AuthController {
   @ApiOperation({ summary: 'Refresh access-token' })
   @ApiOkResponse({ type: RefreshResponseDto })
   @ApiCookieAuth('refresh-token')
-  @UseGuards(JwtRefreshTokenGuard)
+  @UseGuards(JwtRefreshTokenGuard, RolesGuard) // ⚠ This Must Be Changed
+  @Roles(Role.GUEST, Role.MEMBER, Role.ADMIN) // ⚠ This Must Be Deleted
   @HttpCode(HttpStatus.OK)
   @Post('v1/refresh')
   async refresh(@User() payload: PayloadDto): Promise<RefreshResponseDto> {
