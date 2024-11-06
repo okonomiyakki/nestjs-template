@@ -1,6 +1,4 @@
-import { IUser } from '@users/interfaces/user.interface';
-
-export class SignInRequestDto implements Pick<IUser, 'email' | 'password'> {
+export class SignInRequestDto {
   readonly email!: string;
 
   readonly password!: string;

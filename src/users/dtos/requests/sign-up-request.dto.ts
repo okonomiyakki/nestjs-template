@@ -1,6 +1,4 @@
-import { IUser } from '@users/interfaces/user.interface';
-
-export class SignUpRequestDto implements IUser {
+export class SignUpRequestDto {
   readonly email!: string;
 
   readonly password!: string;
