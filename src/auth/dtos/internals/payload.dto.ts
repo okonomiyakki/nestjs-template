@@ -1,4 +1,4 @@
-import { IPayload } from '@auth/interfaces/payload.interface';
+import { IPayload } from '@token/interfaces/payload.interface';
 import { Role } from '@common/constants/roles.enum';
 import { Exclude, Expose } from 'class-transformer';
 
