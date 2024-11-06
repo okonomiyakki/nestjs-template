@@ -1,5 +1,5 @@
-import { AuthPayloadDto } from '@auth/dtos/internals/auth-payload.dto';
-import { PayloadDto } from '@auth/dtos/internals/payload.dto';
+import { AuthPayloadDto } from '@token/dtos/auth-payload.dto';
+import { PayloadDto } from '@token/dtos/payload.dto';
 import jwtConfig from '@core/config/jwt.config';
 import { Inject } from '@nestjs/common';
 import { ConfigType } from '@nestjs/config';

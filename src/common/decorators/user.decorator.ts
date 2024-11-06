@@ -1,4 +1,4 @@
-import { PayloadDto } from '@auth/dtos/internals/payload.dto';
+import { PayloadDto } from '@token/dtos/payload.dto';
 import { createParamDecorator, ExecutionContext } from '@nestjs/common';
 
 export const User = createParamDecorator((data: keyof PayloadDto, ctx: ExecutionContext) => {

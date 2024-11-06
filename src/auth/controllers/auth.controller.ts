@@ -1,4 +1,4 @@
-import { PayloadDto } from '@auth/dtos/internals/payload.dto';
+import { PayloadDto } from '@token/dtos/payload.dto';
 import { SignInRequestDto } from '@auth/dtos/requests/sign-in-request.dto';
 import { RefreshResponseDto } from '@auth/dtos/responses/refresh-response.dto';
 import { SignInResponseDto } from '@auth/dtos/responses/sign-in-response.dto';
