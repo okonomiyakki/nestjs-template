@@ -1,0 +1,61 @@
+######################################
+# BUILD STAGE
+######################################
+FROM node:20-alpine As build
+
+# Set user and working directory (instead of using the root user)
+USER node
+WORKDIR /usr/src/app
+
+# Install dependencies
+COPY --chown=node:node package*.json ./
+RUN npm ci
+
+# Copy source code and build
+COPY --chown=node:node . .
+RUN npm run build:local
+
+# Install only production dependencies
+RUN npm ci --only=production
+
+
+
+######################################
+# RUN STAGE: Local Environments
+######################################
+FROM node:20-alpine
+
+# Set user and working directory
+USER node
+WORKDIR /usr/src/app
+
+# Copy necessary files from the build stage
+COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
+COPY --chown=node:node --from=build /usr/src/app/dist ./dist
+COPY --chown=node:node --from=build /usr/src/app/migrations ./migrations 
+COPY --chown=node:node --from=build /usr/src/app/typeorm.config.ts ./
+COPY --chown=node:node --from=build /usr/src/app/tsconfig.json ./
+COPY --chown=node:node --from=build /usr/src/app/tsconfig.paths.json ./
+COPY --chown=node:node --from=build /usr/src/app/scripts ./scripts
+
+# Set NODE_ENV to 'local'
+ENV NODE_ENV local
+
+# Set execute permission for the apply migrations and application start scripts
+RUN chmod +x ./scripts/start.sh
+
+# Run the start.sh script when the container starts
+CMD ["./scripts/start.sh"]
+
+
+
+######### ⚠ REVERT MIGRATIONS ONLY! ##########
+
+# # Set NODE_ENV to 'local'
+# ENV NODE_ENV local
+
+# # Set execute permission for the revert migrations and application start scripts
+# RUN chmod +x ./scripts/revert.sh
+
+## Run the revert.sh script when you have to revert migrations 
+# CMD ["./scripts/revert.sh"]
