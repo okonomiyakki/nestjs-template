@@ -13,7 +13,7 @@ RUN npm ci
 
 # Copy source code and build
 COPY --chown=node:node . .
-RUN npm run build:local
+RUN npm run build
 
 # Install only production dependencies
 RUN npm ci --only=production
@@ -21,7 +21,7 @@ RUN npm ci --only=production
 
 
 ######################################
-# RUN STAGE: Local Environments
+# RUN STAGE: Local Environment
 ######################################
 FROM node:20-alpine
 
@@ -50,9 +50,6 @@ CMD ["./scripts/start.sh"]
 
 
 ######### ⚠ REVERT MIGRATIONS ONLY! ##########
-
-# # Set NODE_ENV to 'local'
-# ENV NODE_ENV local
 
 # # Set execute permission for the revert migrations and application start scripts
 # RUN chmod +x ./scripts/revert.sh
