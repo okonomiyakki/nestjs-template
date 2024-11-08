@@ -17,5 +17,4 @@
     "esModuleInterop": true
   },
   "extends": "./tsconfig.paths.json",
-  "include": [ "src" ],
 }
