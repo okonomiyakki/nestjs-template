@@ -19,7 +19,6 @@ RUN npm run build
 RUN npm ci --only=production
 
 
-
 ######################################
 # RUN STAGE: Local Environment
 ######################################
@@ -33,26 +32,19 @@ WORKDIR /usr/src/app
 COPY --chown=node:node --from=build /usr/src/app/node_modules ./node_modules
 COPY --chown=node:node --from=build /usr/src/app/dist ./dist
 COPY --chown=node:node --from=build /usr/src/app/migrations ./migrations 
-COPY --chown=node:node --from=build /usr/src/app/typeorm.config.ts ./
-COPY --chown=node:node --from=build /usr/src/app/tsconfig.json ./
-COPY --chown=node:node --from=build /usr/src/app/tsconfig.paths.json ./
 COPY --chown=node:node --from=build /usr/src/app/scripts ./scripts
+COPY --chown=node:node --from=build /usr/src/app/tsconfig.paths.json ./
+COPY --chown=node:node --from=build /usr/src/app/tsconfig.json ./
+COPY --chown=node:node --from=build /usr/src/app/typeorm.config.ts ./
 
-# Set NODE_ENV to 'local'
+# Set default server environment
 ENV NODE_ENV local
+
+# Set default typeorm migration mode
+ENV MIGRATION_MODE run
 
 # Set execute permission for the apply migrations and application start scripts
 RUN chmod +x ./scripts/start.sh
 
 # Run the start.sh script when the container starts
 CMD ["./scripts/start.sh"]
-
-
-
-######### ⚠ REVERT MIGRATIONS ONLY! ##########
-
-# # Set execute permission for the revert migrations and application start scripts
-# RUN chmod +x ./scripts/revert.sh
-
-## Run the revert.sh script when you have to revert migrations 
-# CMD ["./scripts/revert.sh"]
