@@ -31,6 +31,10 @@
 
 [Swagger Documentation](#swagger-documentation)
 
+[Modules Graph](#modules-graph)
+
+[API Request Lifecycle](#api-request-lifecycle)
+
 [Project structure](#project-structure)
 
 [How refresh tokens work](#how-refresh-tokens-work)
@@ -139,6 +143,24 @@ Once the server is running, access the Swagger UI at:
 - http://localhost/api (local)
 
 - http://your-production-domain.com/api (prod)
+
+## Modules Graph
+
+![modules](https://github.com/user-attachments/assets/2367c76f-c86c-44c9-8a5e-f2d889e0ac6a)
+
+## API Request Lifecycle
+
+- POST /api/users/v1/signup
+  ![signup](https://github.com/user-attachments/assets/34720f2f-1948-4d1f-a298-27c0dd37d2ef)
+
+- POST /api/auth/v1/signin
+  ![signin](https://github.com/user-attachments/assets/d2b6fec6-1c99-4c7c-af52-9ef9896a3786)
+
+- DELETE /api/auth/v1/signout
+  ![signout](https://github.com/user-attachments/assets/9e460a2a-f5bd-4c06-a559-b5b9a890dc73)
+
+- POST /api/auth/v1/refresh
+  ![refresh](https://github.com/user-attachments/assets/cde0bd0d-c7d7-4873-ba03-f2e3d89bc79d)
 
 ## Project structure
 
