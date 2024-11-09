@@ -1,7 +1,9 @@
 <div align="center">
 <h1> 🌈 NestJS Template </h1>
 
-[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fokonomiyakki%2Fnestjs-template&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://hits.seeyoufarm.com)
+[![Hits](https://hits.seeyoufarm.com/api/count/incr/badge.svg?url=https%3A%2F%2Fgithub.com%2Fokonomiyakki%2Fnestjs-template&count_bg=%2379C83D&title_bg=%23555555&icon=&icon_color=%23E7E7E7&title=hits&edge_flat=false)](https://github.com/okonomiyakki/nestjs-template)
+
+![GitHub License](https://img.shields.io/github/license/okonomiyakki/nestjs-template.svg)
 
 ![Node.js Badge](https://img.shields.io/badge/Node.js-20.18.0-5FA04E?logo=nodedotjs&logoColor=5FA04E&style=flat)
 ![NestJS Badge](https://img.shields.io/badge/NestJS-10.0.0-E0234E?logo=nestjs&logoColor=E0234E&style=flat)
@@ -32,6 +34,8 @@
 [Project structure](#project-structure)
 
 [How refresh tokens work](#how-refresh-tokens-work)
+
+[License](#license)
 
 </div>
 
@@ -181,3 +185,7 @@ src/
 ```
 
 ## How refresh tokens work
+
+## License
+
+This project is licensed under [MIT licensed](https://github.com/okonomiyakki/nestjs-template/blob/main/LICENSE).
