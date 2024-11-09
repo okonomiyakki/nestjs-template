@@ -146,7 +146,7 @@ Once the server is running, access the Swagger UI at:
 
 ## Modules Graph
 
-![modules](https://github.com/user-attachments/assets/2367c76f-c86c-44c9-8a5e-f2d889e0ac6a)
+![modules](https://github.com/user-attachments/assets/928ddb72-fcc3-4d0a-be1e-aadc2a93737d)
 
 ## API Request Lifecycle
 
