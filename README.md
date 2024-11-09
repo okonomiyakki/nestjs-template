@@ -65,7 +65,7 @@ cd nestjs-template
 npm install
 ```
 
-## TypeORM Migration commands
+## TypeORM Migration Commands
 
 ```bash
 # Create a migration file
@@ -122,6 +122,8 @@ npm run build:dev
 
   For NestJS, migrations are applied using the provided [commands](https://github.com/okonomiyakki/nestjs-template/blob/main/scripts/start.sh), and then 'dist/main.js' is run.
 
+> ⚠ The migration file must be generated only in the development environment.
+
 ## Env Settings
 
 This template includes env files for each operating environment as follows.
@@ -160,6 +162,8 @@ Once the server is running, access the Swagger UI at:
   ![signout](https://github.com/user-attachments/assets/9e460a2a-f5bd-4c06-a559-b5b9a890dc73)
 
 - POST /api/auth/v1/refresh
+
+  The role guard here is for testing purposes. So Remove [this code](https://github.com/okonomiyakki/nestjs-template/blob/629f59a923585f47dd40bbb6c07933608e1f7a1c/src/auth/controllers/auth.controller.ts#L80C36-L81C72) when using it.
   ![refresh](https://github.com/user-attachments/assets/cde0bd0d-c7d7-4873-ba03-f2e3d89bc79d)
 
 ## Project structure
