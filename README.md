@@ -158,11 +158,11 @@ Swagger is set up for API documentation.
 
 Once the server is running, access the Swagger UI at:
 
-- http://localhost:5500/api (dev)
+- `http://localhost:`[ server-running-port ](https://github.com/okonomiyakki/nestjs-template/blob/4c1f8a1a6cdfdd9c2ffbd0f64bc36b011f919bdb/.env.dev#L6)`/api` ········ (development)
 
-- http://localhost/api (local)
+- http://localhost/api ······························································· (local)
 
-- http://your-production-domain.com/api (prod)
+- `http://`[ your-production-domain.com ](https://github.com/okonomiyakki/nestjs-template/blob/6a3650b5300461dbdbf455c026bd30dd640a424b/nginx/nginx.conf#L9)`/api` ········· (production)
 
 ## Modules Graph
 
