@@ -21,7 +21,7 @@
 
 [Install Dependencies](#install-dependencies)
 
-[TypeORM Migration Commands](#typeorm-migration-commands)
+[Migration Scripts](#migration-scripts)
 
 [Build the App](#build-the-app)
 
@@ -29,11 +29,11 @@
 
 [Env Settings](#env-settings)
 
-[Swagger Documentation](#swagger-documentation)
+[Documentation](#documentation)
 
 [Modules Graph](#modules-graph)
 
-[API Request Lifecycle](#api-request-lifecycle)
+[API Lifecycle](#api-lifecycle)
 
 [Project Structure](#project-structure)
 
@@ -65,38 +65,58 @@ cd nestjs-template
 npm install
 ```
 
-## TypeORM Migration Commands
+## Migration Scripts
 
-```bash
-# Create a migration file
-npm run migration:create
+- [TypeORM CLI](https://github.com/okonomiyakki/nestjs-template/blob/9c6c53a0adfa7c866eac3f7e8679ceec971a87f9/package.json#L18-L18)
 
-# Generate a migration file
-npm run migration:generate
+  ```bash
+  # Run the TypeORM CLI using "ts-node"
+  npm run typeorm
+  ```
 
-# Show generated migration files
-npm run migration:show
+- Migration [configuration](https://github.com/okonomiyakki/nestjs-template/blob/9c6c53a0adfa7c866eac3f7e8679ceec971a87f9/package.json#L19-L19)
 
-# Apply the migration files
-npm run migration:run
+  ```bash
+  # Set migration configuration with development settings
+  npm run typeorm:config
+  ```
 
-# Revert the migration file
-npm run migration:revert
-```
+- [Migrations](https://github.com/okonomiyakki/nestjs-template/blob/9c6c53a0adfa7c866eac3f7e8679ceec971a87f9/package.json#L20-L24)
+
+  ```bash
+  # Create a new migration file
+  npm run migration:create
+
+  # Generate a migration file based on changes in the entity
+  npm run migration:generate
+
+  # Show the list of generated migration files
+  npm run migration:show
+
+  # Apply the migration files
+  npm run migration:run
+
+  # Revert the last applied migration file
+  npm run migration:revert
+  ```
+
+> ⚠ The migration file must be generated only in the development environment.
 
 ## Build the App
 
-```bash
-# Transpile TypeScript files using "tsc"
-npm run build
+- [Development mode](https://github.com/okonomiyakki/nestjs-template/blob/9c6c53a0adfa7c866eac3f7e8679ceec971a87f9/package.json#L12-L13)
 
-# Generate migrations and build the application
-npm run build:dev
-```
+  ```bash
+  # Transpile TypeScript files using "tsc"
+  npm run build
+
+  # Generate migrations and build the application
+  npm run build:dev
+  ```
 
 ## Run the App
 
-- Development mode
+- [Development mode](https://github.com/okonomiyakki/nestjs-template/blob/9c6c53a0adfa7c866eac3f7e8679ceec971a87f9/package.json#L14-L15)
 
   ```bash
   # Run the application in "watch" mode using "ts-node"
@@ -106,7 +126,7 @@ npm run build:dev
   npm run start:dev
   ```
 
-- Local mode with production settings
+- [Local mode](https://github.com/okonomiyakki/nestjs-template/blob/9c6c53a0adfa7c866eac3f7e8679ceec971a87f9/package.json#L16-L17) with production settings
 
   ```bash
   # Start containers using "docker-compose.local.yml"
@@ -122,8 +142,6 @@ npm run build:dev
 
   For NestJS, migrations are applied using the provided [commands](https://github.com/okonomiyakki/nestjs-template/blob/main/scripts/start.sh), and then 'dist/main.js' is run.
 
-> ⚠ The migration file must be generated only in the development environment.
-
 ## Env Settings
 
 This template includes env files for each operating environment as follows.
@@ -134,7 +152,7 @@ This template includes env files for each operating environment as follows.
 
 - [Production mode](https://github.com/okonomiyakki/nestjs-template/blob/main/.env.prod)
 
-## Swagger Documentation
+## Documentation
 
 Swagger is set up for API documentation.
 
@@ -150,7 +168,7 @@ Once the server is running, access the Swagger UI at:
 
 ![modules](https://github.com/user-attachments/assets/928ddb72-fcc3-4d0a-be1e-aadc2a93737d)
 
-## API Request Lifecycle
+## API Lifecycle
 
 - POST /api/users/v1/signup
   ![signup](https://github.com/user-attachments/assets/34720f2f-1948-4d1f-a298-27c0dd37d2ef)
