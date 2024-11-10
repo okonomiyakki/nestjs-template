@@ -21,13 +21,13 @@
 
 [Install Dependencies](#install-dependencies)
 
+[Env Settings](#env-settings)
+
 [Migration Scripts](#migration-scripts)
 
 [Build the App](#build-the-app)
 
 [Run the App](#run-the-app)
-
-[Env Settings](#env-settings)
 
 [Documentation](#documentation)
 
@@ -64,6 +64,16 @@ cd nestjs-template
 ```bash
 npm install
 ```
+
+## Env Settings
+
+This template includes env files for each operating environment as follows.
+
+- [Development mode](https://github.com/okonomiyakki/nestjs-template/blob/main/.env.dev)
+
+- [Local mode](https://github.com/okonomiyakki/nestjs-template/blob/main/.env.local) with production settings
+
+- [Production mode](https://github.com/okonomiyakki/nestjs-template/blob/main/.env.prod)
 
 ## Migration Scripts
 
@@ -141,16 +151,6 @@ npm install
   [NestJS](https://github.com/okonomiyakki/nestjs-template/blob/main/Dockerfile.local) and [NGINX](https://github.com/okonomiyakki/nestjs-template/blob/main/nginx/Dockerfile.local) are dockerized through their respective Dockerfiles.
 
   For NestJS, migrations are applied using the provided [commands](https://github.com/okonomiyakki/nestjs-template/blob/main/scripts/start.sh), and then 'dist/main.js' is run.
-
-## Env Settings
-
-This template includes env files for each operating environment as follows.
-
-- [Development mode](https://github.com/okonomiyakki/nestjs-template/blob/main/.env.dev)
-
-- [Local mode](https://github.com/okonomiyakki/nestjs-template/blob/main/.env.local) with production settings
-
-- [Production mode](https://github.com/okonomiyakki/nestjs-template/blob/main/.env.prod)
 
 ## Documentation
 
