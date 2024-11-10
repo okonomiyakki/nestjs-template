@@ -15,17 +15,17 @@
 
 <p>This template helps you quickly start a user service in Docker environments using NestJS</p>
 
-[Getting started](#getting-started)
+[Getting Started](#getting-started)
 
 [Clone the Repository](#clone-the-repository)
 
 [Install Dependencies](#install-dependencies)
 
-[TypeORM Migration commands](#typeorm-migration-commands)
+[TypeORM Migration Commands](#typeorm-migration-commands)
 
-[Build the app](#build-the-app)
+[Build the App](#build-the-app)
 
-[Run the app](#run-the-app)
+[Run the App](#run-the-app)
 
 [Env Settings](#env-settings)
 
@@ -35,7 +35,7 @@
 
 [API Request Lifecycle](#api-request-lifecycle)
 
-[Project structure](#project-structure)
+[Project Structure](#project-structure)
 
 [How refresh tokens work](#how-refresh-tokens-work)
 
@@ -43,7 +43,7 @@
 
 </div>
 
-## Getting started
+## Getting Started
 
 Before starting, make sure you have those components on your workstation
 
@@ -84,7 +84,7 @@ npm run migration:run
 npm run migration:revert
 ```
 
-## Build the app
+## Build the App
 
 ```bash
 # Transpile TypeScript files using "tsc"
@@ -94,7 +94,7 @@ npm run build
 npm run build:dev
 ```
 
-## Run the app
+## Run the App
 
 - Development mode
 
@@ -166,7 +166,7 @@ Once the server is running, access the Swagger UI at:
   The role guard here is for testing purposes. So Remove [this code](https://github.com/okonomiyakki/nestjs-template/blob/629f59a923585f47dd40bbb6c07933608e1f7a1c/src/auth/controllers/auth.controller.ts#L80C36-L81C72) when using it.
   ![refresh](https://github.com/user-attachments/assets/cde0bd0d-c7d7-4873-ba03-f2e3d89bc79d)
 
-## Project structure
+## Project Structure
 
 ```
 src/
